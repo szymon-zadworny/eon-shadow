@@ -1,0 +1,150 @@
+general:
+  stop_time: 1100s
+  model_unblocked_syscall_latency: true
+
+network:
+  graph:
+    type: gml
+    file:
+      - /usr/local/app/scenario/simple/graph_20.gml
+      -
+  use_shortest_path: false
+
+hosts:
+  bootstrap:
+    network_node_id: 0
+    ip_addr: 11.0.0.1
+    processes:
+    - path: /usr/local/app/eon-client/eon-client
+      args: |
+        --stdout --log-level debug --bootstrap-mode --secret-key-seed 1 --script
+        "[!Wait {time: 1100s}]"
+      expected_final_state: running
+
+  object-provider:
+    network_node_id: 1
+    processes:
+    - path: /usr/local/app/eon-client/eon-client
+      args: |
+        --stdout --log-level debug --bootstrap-addr 11.0.0.1 --secret-key-seed 12 --script 
+        "[!Publish {path: /usr/local/app/test.txt}, !Wait {time: 70s}]"
+      expected_final_state: running
+      start_time: 1030s
+
+  object-consumer:
+    network_node_id: 2
+    processes:
+    - path: /usr/local/app/eon-client/eon-client
+      args: |
+        --stdout --log-level debug --bootstrap-addr 11.0.0.1 --script
+        "[!Get {id: "tfu/bZlxQcGmmf/CqI23mYdDunY90GVF8MVjXNnOVtc="}, !Wait {time: 40s}]"
+      expected_final_state: running
+      start_time: 1060s
+
+  node0: &node
+    network_node_id: 3
+    processes:
+    - &basic_proc
+      path: /usr/local/app/eon-client/eon-client
+      args: |
+        --stdout --log-level debug --bootstrap-addr 11.0.0.1 --script
+        "[!Wait {time: 1100s}]"
+      expected_final_state: running
+      start_time: 0s
+
+  node1:
+    <<: *node
+    network_node_id: 4
+    processes:
+      - <<: *basic_proc
+        start_time: 1s
+  node2:
+    <<: *node
+    network_node_id: 5
+    processes:
+      - <<: *basic_proc
+        start_time: 2s
+  node3:
+    <<: *node
+    network_node_id: 6
+    processes:
+      - <<: *basic_proc
+        start_time: 3s
+  node4:
+    <<: *node
+    network_node_id: 7
+    processes:
+      - <<: *basic_proc
+        start_time: 4s
+  node5:
+    <<: *node
+    network_node_id: 8
+    processes:
+      - <<: *basic_proc
+        start_time: 5s
+  node6:
+    <<: *node
+    network_node_id: 9
+    processes:
+      - <<: *basic_proc
+        start_time: 6s
+  node7:
+    <<: *node
+    network_node_id: 10
+    processes:
+      - <<: *basic_proc
+        start_time: 7s
+  node8:
+    <<: *node
+    network_node_id: 11
+    processes:
+      - <<: *basic_proc
+        start_time: 8s
+  node9:
+    <<: *node
+    network_node_id: 12
+    processes:
+      - <<: *basic_proc
+        start_time: 9s
+  node10:
+    <<: *node
+    network_node_id: 13
+    processes:
+      - <<: *basic_proc
+        start_time: 10s
+  node11:
+    <<: *node
+    network_node_id: 14
+    processes:
+      - <<: *basic_proc
+        start_time: 11s
+  node12:
+    <<: *node
+    network_node_id: 15
+    processes:
+      - <<: *basic_proc
+        start_time: 12s
+  node13:
+    <<: *node
+    network_node_id: 16
+    processes:
+      - <<: *basic_proc
+        start_time: 13s
+  node14:
+    <<: *node
+    network_node_id: 17
+    processes:
+      - <<: *basic_proc
+        start_time: 14s
+  node15:
+    <<: *node
+    network_node_id: 18
+    processes:
+      - <<: *basic_proc
+        start_time: 15s
+  node16:
+    <<: *node
+    network_node_id: 19
+    processes:
+      - <<: *basic_proc
+        start_time: 16s

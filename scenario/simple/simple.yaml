@@ -1,0 +1,27 @@
+general:
+  stop_time: 10s
+  model_unblocked_syscall_latency: true
+
+network:
+  graph:
+    type: 1_gbit_switch
+
+hosts:
+  bootstrap:
+    network_node_id: 0
+    ip_addr: 11.0.0.2
+    processes:
+    - path: /usr/local/app/eon-client/eon-client
+      args: |
+        --stdout --log-level debug --bootstrap-mode --secret-key-seed 1 --script
+        "[!Wait {time: 10s}]"
+      expected_final_state: running
+
+  object-provider:
+    network_node_id: 0
+    processes:
+    - path: /usr/local/app/eon-client/eon-client
+      args: |
+        --stdout --log-level debug --bootstrap-addr 11.0.0.2 --secret-key-seed 12 --script 
+        "[!Wait {time: 2s}, !Publish {path: /usr/local/app/test.txt}, !Wait {time: 10s}]"
+      expected_final_state: running
